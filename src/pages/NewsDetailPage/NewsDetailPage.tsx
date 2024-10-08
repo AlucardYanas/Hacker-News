@@ -1,8 +1,8 @@
-
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useGetStoryQuery } from '../../shared/api/hackerNewsApi';
-import { Button, Container } from '@mui/material';
-import CommentItem from '../../entities/comment/CommentItem'; 
+import { Button, Container, Card, CardContent, Typography, Box, CircularProgress } from '@mui/material';
+import CommentItem from '../../entities/comment/CommentItem';
 
 const NewsDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -10,37 +10,57 @@ const NewsDetailPage = () => {
 
   const commentCount = data?.kids ? data.kids.length : 0;
 
-  if (isLoading) return <div>Loading...</div>;
+
+  useEffect(() => {
+    const interval = setInterval(refetch, 60000);
+    return () => clearInterval(interval);
+  }, [refetch]);
+
+  if (isLoading) return <Box display="flex" justifyContent="center"><CircularProgress /></Box>;
   if (error || !data) return <div>Error loading story</div>;
 
   return (
     <Container>
-      <h1>{data.title}</h1>
-      <p>
-        by {data.by} on {new Date(data.time * 1000).toLocaleDateString()}
-      </p>
-      <p>Score: {data.score}</p>
-      <a href={data.url} target="_blank" rel="noopener noreferrer">
-        Read the full story
-      </a>
+      <Card variant="outlined" sx={{ marginBottom: '20px', backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
+        <CardContent>
+          <Typography variant="h5" component="div" sx={{ color: '#ffffff' }}>
+            {data.title}
+          </Typography>
+          <Typography color="textSecondary" sx={{ color: '#999999' }}>
+            by {data.by} on {new Date(data.time * 1000).toLocaleDateString()}
+          </Typography>
+          <Typography color="textSecondary" sx={{ color: '#999999' }}>
+            Score: {data.score}
+          </Typography>
+          <a href={data.url} target="_blank" rel="noopener noreferrer" style={{ color: '#1da1f2' }}>
+            Read the full story
+          </a>
+          <Typography color="textSecondary" sx={{ color: '#999999' }}>
+            Comments: {commentCount}
+          </Typography>
+        </CardContent>
+      </Card>
 
-     
-      <p>Comments: {commentCount}</p>
+      {/* Кнопка обновления комментариев */}
+      <Box marginBottom="20px">
+        <Button variant="contained" onClick={refetch} sx={{ backgroundColor: '#1da1f2' }}>
+          Refresh Comments
+        </Button>
+      </Box>
 
-  
-      <Button variant="contained" onClick={refetch} sx={{ margin: '10px 0' }}>
-        Refresh Comments
-      </Button>
-
-      <div>
+      {/* Список комментариев */}
+      <Box>
         {data.kids?.map((commentId: number) => (
           <CommentItem key={commentId} id={commentId} />
         ))}
-      </div>
+      </Box>
 
-      <Button variant="contained" component={Link} to="/" sx={{ margin: '10px 0' }}>
-        Back to news list
-      </Button>
+      {/* Кнопка возврата к списку новостей */}
+      <Box marginTop="20px">
+        <Button variant="contained" component={Link} to="/" sx={{ backgroundColor: '#1da1f2' }}>
+          Back to news list
+        </Button>
+      </Box>
     </Container>
   );
 };

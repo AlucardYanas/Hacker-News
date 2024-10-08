@@ -1,21 +1,32 @@
+import  { useEffect } from 'react';
 import { useGetTopStoriesQuery } from '../../shared/api/hackerNewsApi';
 import NewsItem from '../../entities/news/NewsItem';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Box, CircularProgress } from '@mui/material';
 
 const NewsListPage = () => {
   const { data, error, isLoading, refetch } = useGetTopStoriesQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  useEffect(() => {
+    const interval = setInterval(refetch, 60000);
+    return () => clearInterval(interval); // Очистка таймера при размонтировании компонента
+  }, [refetch]);
+
+  if (isLoading) return <Box display="flex" justifyContent="center"><CircularProgress /></Box>;
   if (error) return <div>Error loading news</div>;
 
   return (
     <Container>
-      <Button variant="contained" onClick={refetch}>Refresh</Button>
-      <ul>
+      <Box display="flex" justifyContent="center" marginBottom="20px">
+        <Button variant="contained" onClick={refetch}>
+          Refresh News
+        </Button>
+      </Box>
+
+      <Box display="flex" flexDirection="column" gap={2}>
         {data?.slice(0, 100).map((id) => (
           <NewsItem key={id} id={id} />
         ))}
-      </ul>
+      </Box>
     </Container>
   );
 };
