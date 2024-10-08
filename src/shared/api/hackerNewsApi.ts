@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Story } from '../types/types'; 
 
 export const hackerNewsApi = createApi({
   reducerPath: 'hackerNewsApi',
@@ -7,7 +8,7 @@ export const hackerNewsApi = createApi({
     getTopStories: builder.query<number[], void>({
       query: () => 'topstories.json',
     }),
-    getStory: builder.query({
+    getStory: builder.query<Story, number>({
       query: (id) => `item/${id}.json`,
     }),
   }),

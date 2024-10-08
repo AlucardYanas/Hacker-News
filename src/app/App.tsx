@@ -3,7 +3,6 @@ import NewsListPage from '../pages/NewsListPage/NewsListPage';
 import NewsDetailPage from '../pages/NewsDetailPage/NewsDetailPage';
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,7 +17,6 @@ const router = createBrowserRouter([
     element: <NotFoundPage />,
   },
 ]);
-
 
 const App = () => {
   return <RouterProvider router={router} />;

@@ -17,7 +17,9 @@ const NewsListPage = () => {
   return (
     <Container>
       <Box display="flex" justifyContent="center" marginBottom="20px">
-        <Button variant="contained" onClick={refetch}>
+        <Button variant="contained" onClick={() => {
+             void refetch()
+          }}>
           Refresh News
         </Button>
       </Box>

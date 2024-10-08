@@ -1,43 +1,42 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useGetStoryQuery } from '../../shared/api/hackerNewsApi';
-import { Button, Box, Typography } from '@mui/material';
+import NestedCommentItem from './CommentItem'; 
+import { Button } from '@mui/material'; 
 
 interface CommentItemProps {
   id: number;
 }
 
-const CommentItem: React.FC<CommentItemProps> = ({ id }) => {
+const CommentItem: React.FC<CommentItemProps> = ({ id }: CommentItemProps) => {
   const { data, error, isLoading } = useGetStoryQuery(id);
   const [showReplies, setShowReplies] = useState(false);
 
-  if (isLoading) return <Typography>Loading comment...</Typography>;
-  if (error || !data) return <Typography>Error loading comment</Typography>;
+  if (isLoading) return <div>Loading comment...</div>;
+  if (error || !data) return <div>Error loading comment</div>;
 
   return (
-    <Box sx={{ marginLeft: '20px', marginTop: '10px', borderLeft: '1px solid #333', paddingLeft: '10px' }}>
-      <Typography sx={{ color: '#ffffff' }}>
-        <strong>{data.by}</strong>: {data.text}
-      </Typography>
-      {data.kids && (
+    <div style={{ marginLeft: '20px', marginTop: '10px' }}>
+      <p><strong>{data.by}</strong>: {data.text}</p>
+      {data.kids && data.kids.length > 0 && (
         <>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => setShowReplies(!showReplies)}
-            sx={{ marginTop: '10px', color: '#1da1f2', borderColor: '#1da1f2' }}
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={() => setShowReplies(!showReplies)} 
+            sx={{ marginTop: '10px', color: '#1da1f2', borderColor: '#1da1f2' }}  // Стилизация кнопки
           >
-            {showReplies ? 'Hide replies' : 'Show replies'}
+            {showReplies ? 'Hide replies' : `Show replies (${data.kids.length})`}
           </Button>
           {showReplies && (
-            <Box>
+            <div>
               {data.kids.map((childId: number) => (
-                <CommentItem key={childId} id={childId} />
+                <NestedCommentItem key={childId} id={childId} />
               ))}
-            </Box>
+            </div>
           )}
         </>
       )}
-    </Box>
+    </div>
   );
 };
 

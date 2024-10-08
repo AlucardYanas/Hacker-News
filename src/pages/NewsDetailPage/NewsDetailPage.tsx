@@ -10,9 +10,10 @@ const NewsDetailPage = () => {
 
   const commentCount = data?.kids ? data.kids.length : 0;
 
-
   useEffect(() => {
-    const interval = setInterval(refetch, 60000);
+    const interval = setInterval(() => {
+      void refetch();
+    }, 60000);
     return () => clearInterval(interval);
   }, [refetch]);
 
@@ -41,21 +42,24 @@ const NewsDetailPage = () => {
         </CardContent>
       </Card>
 
-      {/* Кнопка обновления комментариев */}
       <Box marginBottom="20px">
-        <Button variant="contained" onClick={refetch} sx={{ backgroundColor: '#1da1f2' }}>
+        <Button
+          variant="contained"
+          onClick={() => {
+             void refetch()
+          }}
+          sx={{ backgroundColor: '#1da1f2' }}
+        >
           Refresh Comments
         </Button>
       </Box>
 
-      {/* Список комментариев */}
       <Box>
         {data.kids?.map((commentId: number) => (
           <CommentItem key={commentId} id={commentId} />
         ))}
       </Box>
 
-      {/* Кнопка возврата к списку новостей */}
       <Box marginTop="20px">
         <Button variant="contained" component={Link} to="/" sx={{ backgroundColor: '#1da1f2' }}>
           Back to news list
