@@ -8,7 +8,7 @@ const NewsListPage = () => {
 
   useEffect(() => {
     const interval = setInterval(refetch, 60000);
-    return () => clearInterval(interval); // Очистка таймера при размонтировании компонента
+    return () => clearInterval(interval); 
   }, [refetch]);
 
   if (isLoading) return <Box display="flex" justifyContent="center"><CircularProgress /></Box>;
