@@ -12,9 +12,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ id }: CommentItemProps) => {
   const { data, error, isLoading } = useGetStoryQuery(id);
   const [showReplies, setShowReplies] = useState(false);
 
-  if (!data || data.deleted) return null; 
-
-  if (isLoading) {
+  if (isLoading && !showReplies) {
     return (
       <Box sx={{ marginLeft: '20px', marginTop: '10px', padding: '10px', border: '1px solid #333', borderRadius: '4px', backgroundColor: '#1a1a1a' }}>
         <Skeleton variant="text" width="50%" />
@@ -24,12 +22,12 @@ const CommentItem: React.FC<CommentItemProps> = ({ id }: CommentItemProps) => {
     );
   }
 
+  if (!data || data.deleted || data.dead || data.text === '[flagged]') return null;
+
   if (error) {
     const errorMessage = 'Error loading comment';
     return <div>{errorMessage}</div>;
   }
-
-  if (!data) return <div>Error loading comment</div>;
 
   const sanitizedText: string = DOMPurify.sanitize(data?.text ?? '');
 
@@ -48,10 +46,10 @@ const CommentItem: React.FC<CommentItemProps> = ({ id }: CommentItemProps) => {
       <div dangerouslySetInnerHTML={{ __html: sanitizedText }} />
       {data.kids && data.kids.length > 0 && (
         <>
-          <Button 
-            variant="outlined" 
-            size="small" 
-            onClick={() => setShowReplies(!showReplies)} 
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => setShowReplies(!showReplies)}
             sx={{ marginTop: '10px', color: '#1da1f2', borderColor: '#1da1f2' }}
           >
             {showReplies ? 'Hide replies' : `Show replies (${data.kids.length})`}

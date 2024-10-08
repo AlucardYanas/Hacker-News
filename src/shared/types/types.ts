@@ -7,6 +7,7 @@ export interface Story {
   url: string;
   kids?: number[]; 
   text?: string;
-  deleted?: boolean;  
+  deleted?: boolean; 
+  dead?: boolean; 
 }
 
