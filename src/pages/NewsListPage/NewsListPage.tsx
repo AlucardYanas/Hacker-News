@@ -1,7 +1,8 @@
 import  { useEffect } from 'react';
 import { useGetTopStoriesQuery } from '../../shared/api/hackerNewsApi';
 import NewsItem from '../../entities/news/NewsItem';
-import { Button, Container, Box, CircularProgress } from '@mui/material';
+import { Button, Container, Box } from '@mui/material';
+import Loader from '../../shared/ui/Loader';
 
 const NewsListPage = () => {
   const { data, error, isLoading, refetch } = useGetTopStoriesQuery();
@@ -11,13 +12,16 @@ const NewsListPage = () => {
     return () => clearInterval(interval); 
   }, [refetch]);
 
-  if (isLoading) return <Box display="flex" justifyContent="center"><CircularProgress /></Box>;
+  if (isLoading) {
+    return <Loader />;
+  }
+
   if (error) return <div>Error loading news</div>;
 
   return (
     <Container>
-      <Box display="flex" justifyContent="center" marginBottom="20px">
-        <Button variant="contained" onClick={() => {
+      <Box display="flex" justifyContent="center" marginBottom="20px" marginTop="20px">
+        <Button variant="contained" size="large"  onClick={() => {
              void refetch()
           }}>
           Refresh News

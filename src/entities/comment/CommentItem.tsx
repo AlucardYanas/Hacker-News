@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DOMPurify from 'dompurify';
 import { useGetStoryQuery } from '../../shared/api/hackerNewsApi';
 import NestedCommentItem from './CommentItem';
-import { Button, Box } from '@mui/material';
+import { Button, Box, Skeleton } from '@mui/material';
 
 interface CommentItemProps {
   id: number;
@@ -12,20 +12,26 @@ const CommentItem: React.FC<CommentItemProps> = ({ id }: CommentItemProps) => {
   const { data, error, isLoading } = useGetStoryQuery(id);
   const [showReplies, setShowReplies] = useState(false);
 
-  if (isLoading) return <div>Loading comment...</div>;
-  
+  if (!data || data.deleted) return null; 
+
+  if (isLoading) {
+    return (
+      <Box sx={{ marginLeft: '20px', marginTop: '10px', padding: '10px', border: '1px solid #333', borderRadius: '4px', backgroundColor: '#1a1a1a' }}>
+        <Skeleton variant="text" width="50%" />
+        <Skeleton variant="text" width="80%" />
+        <Skeleton variant="rectangular" width="100%" height={50} sx={{ marginTop: '10px' }} />
+      </Box>
+    );
+  }
+
   if (error) {
-    let errorMessage = 'Error loading comment';
-    if (typeof error === 'object' && error !== null && 'status' in error) {
-      const errorObj = error as { status?: number; data?: { message?: string } };
-      errorMessage = errorObj?.data?.message || `Error: ${errorObj.status}`;
-    }
+    const errorMessage = 'Error loading comment';
     return <div>{errorMessage}</div>;
   }
 
   if (!data) return <div>Error loading comment</div>;
 
-  const sanitizedText: string = DOMPurify.sanitize(data?.text ?? '')
+  const sanitizedText: string = DOMPurify.sanitize(data?.text ?? '');
 
   return (
     <Box

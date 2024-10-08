@@ -1,15 +1,25 @@
 import { useGetStoryQuery } from '../../shared/api/hackerNewsApi';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, Typography, CircularProgress } from '@mui/material';
+import { Card, CardContent, Typography, Skeleton } from '@mui/material';
 
 interface NewsItemProps {
   id: number;
 }
 
-const NewsItem: React.FC<NewsItemProps> = ({ id }) => {
+const NewsItem: React.FC<NewsItemProps> = ({ id }: NewsItemProps) => {
   const { data, error, isLoading } = useGetStoryQuery(id);
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) {
+    return (
+      <Card variant="outlined" sx={{ backgroundColor: '#1a1a1a', border: '1px solid #333', marginBottom: '10px' }}>
+        <CardContent>
+          <Skeleton variant="text" width="80%" />
+          <Skeleton variant="text" width="40%" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   if (error || !data) return <div>Error loading story</div>;
 
   return (

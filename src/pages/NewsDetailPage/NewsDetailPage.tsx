@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useGetStoryQuery } from '../../shared/api/hackerNewsApi';
-import { Button, Container, Card, CardContent, Typography, Box, CircularProgress } from '@mui/material';
+import { Button, Container, Card, CardContent, Typography, Box} from '@mui/material';
 import CommentItem from '../../entities/comment/CommentItem';
+import Loader from '../../shared/ui/Loader';
 
 const NewsDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,12 +18,14 @@ const NewsDetailPage = () => {
     return () => clearInterval(interval);
   }, [refetch]);
 
-  if (isLoading) return <Box display="flex" justifyContent="center"><CircularProgress /></Box>;
+  if (isLoading) {
+    return <Loader />;
+  }  
   if (error || !data) return <div>Error loading story</div>;
 
   return (
     <Container>
-      <Card variant="outlined" sx={{ marginBottom: '20px', backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
+      <Card variant="outlined" sx={{ marginBottom: '20px', marginTop: '20px', backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
         <CardContent>
           <Typography variant="h5" component="div" sx={{ color: '#ffffff' }}>
             {data.title}
@@ -61,7 +64,7 @@ const NewsDetailPage = () => {
       </Box>
 
       <Box marginTop="20px">
-        <Button variant="contained" component={Link} to="/" sx={{ backgroundColor: '#1da1f2' }}>
+        <Button variant="contained"  component={Link} to="/" sx={{ backgroundColor: '#1da1f2', marginBottom: '20px' }}>
           Back to news list
         </Button>
       </Box>

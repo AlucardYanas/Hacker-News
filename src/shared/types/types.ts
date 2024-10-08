@@ -6,6 +6,7 @@ export interface Story {
   score: number;
   url: string;
   kids?: number[]; 
-  text?: string;  
+  text?: string;
+  deleted?: boolean;  
 }
 
