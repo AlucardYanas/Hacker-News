@@ -1,50 +1,67 @@
-# React + TypeScript + Vite
+# Hacker News Interface
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Простое веб-приложение для просмотра последних новостей с сайта Hacker News.
 
-Currently, two official plugins are available:
+## Описание
+Приложение позволяет пользователям просматривать последние 100 новостей, а также читать комментарии. Интерфейс выполнен с использованием Material UI и поддерживает автообновление новостей и комментариев.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Используемые технологии
+- React v18.2.0
+- RTK Query
+- React Router v6
+- Material UI v5
+- TypeScript v4
 
-## Expanding the ESLint configuration
+## Требования
+- Node.js >= 14.0.0
+- npm >= 6.0.0
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Установка и запуск
+1. Клонируйте репозиторий:
+   ```bash
+   git clone https://github.com/username/repository-name.git
+   ```
+2. Перейдите в папку проекта:
+   ```bash
+   cd repository-name
+   ```
+3. Установите зависимости:
+   ```bash
+   npm install
+   ```
+4. Запустите проект в режиме разработки:
+   ```bash
+   npm run dev
+   ```
+5. Откройте в браузере:
+   ```
+   http://localhost:3000
+   ```
 
-- Configure the top-level `parserOptions` property like this:
+## Скрипты
+- `npm run dev` - Запускает проект в режиме разработки.
+- `npm run build` - Создает оптимизированную сборку проекта.
+- `npm run lint` - Проверяет проект с помощью ESLint.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Структура проекта
+Проект структурирован с использованием FSD (Feature-Sliced Design):
+
+```
+src/
+├── app/
+│   ├── providers/
+│   ├── store/
+├── pages/
+│   ├── NewsListPage/
+│   ├── NewsDetailPage/
+│   └── NotFoundPage/
+├── entities/
+│   ├── news/
+│   └── comment/
+├── shared/
+│   └── api/
+
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```

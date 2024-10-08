@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import DOMPurify from 'dompurify';
 import { useGetStoryQuery } from '../../shared/api/hackerNewsApi';
 import NestedCommentItem from './CommentItem';

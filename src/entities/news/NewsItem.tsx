@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGetStoryQuery } from '../../shared/api/hackerNewsApi';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, Typography, CircularProgress } from '@mui/material';
